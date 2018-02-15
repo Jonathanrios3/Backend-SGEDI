@@ -119,6 +119,7 @@ public class UsersREST {
                 if (usersEJB.findUsersByNumDocument(users.getNumDocument()) == null) {
 
                     users.setPassword(DigestUtil.cifrarPassword(users.getPassword()));
+                    System.out.println("CIUDAD"+ users.getIdCities());
                     usersEJB.create(users);
                     try {
 

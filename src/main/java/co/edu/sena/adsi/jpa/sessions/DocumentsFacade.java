@@ -6,9 +6,13 @@
 package co.edu.sena.adsi.jpa.sessions;
 
 import co.edu.sena.adsi.jpa.entities.Documents;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 /**
  *
@@ -27,6 +31,33 @@ public class DocumentsFacade extends AbstractFacade<Documents> {
 
     public DocumentsFacade() {
         super(Documents.class);
+    }
+    
+    public List<Documents> traerMisDocumentos(Integer idUsuario){
+        StoredProcedureQuery procedure = em.createStoredProcedureQuery("traerMisDocumentos", Documents.class);
+        procedure.registerStoredProcedureParameter("idUsuario", Integer.class, ParameterMode.IN);
+        procedure.setParameter("idUsuario", idUsuario);
+        procedure.execute();
+        List<Documents> misDocumentos = (List<Documents>) procedure.getResultList();
+        return misDocumentos;
+    }
+    
+    public List<Documents> traerMisDocumentosCompartidos(Integer idUsuario){
+        StoredProcedureQuery procedure = em.createStoredProcedureQuery("traerMisDocumentosCompartidos", Documents.class);
+        procedure.registerStoredProcedureParameter("idUsuario", Integer.class, ParameterMode.IN);
+        procedure.setParameter("idUsuario", idUsuario);
+        procedure.execute();
+        List<Documents> misDocumentosCompartidos = (List<Documents>) procedure.getResultList();
+        return misDocumentosCompartidos;
+    }
+    
+    public Boolean compartirDocumento(Integer propieatario, Integer usuario, Integer documento){
+        Query function = em.createNativeQuery("select compartirDocumento(?,?,?)");
+        function.setParameter(1,propieatario);
+        function.setParameter(2,usuario);
+        function.setParameter(3,documento);
+        Boolean status = (Boolean) function.getSingleResult();
+        return status;
     }
     
 }

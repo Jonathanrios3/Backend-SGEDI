@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author adsi1261718
+ * @author Johan
  */
 @Entity
 @Table(name = "documents_type")
@@ -47,7 +47,7 @@ public class DocumentsType implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "description")
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "DocumentsType")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDocumentsType")
     private List<Users> usersList;
 
     public DocumentsType() {

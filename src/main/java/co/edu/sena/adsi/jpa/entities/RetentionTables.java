@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author adsi1261718
+ * @author Johan
  */
 @Entity
 @Table(name = "retention_tables")

@@ -15,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -29,25 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author adsi1261718
+ * @author Johan
  */
 @Entity
 @Table(name = "users")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u")
-    , @NamedQuery(name = "Users.findById", query = "SELECT u FROM Users u WHERE u.id = :id")
-    , @NamedQuery(name = "Users.findByLastName", query = "SELECT u FROM Users u WHERE u.lastName = :lastName")
-    , @NamedQuery(name = "Users.findByName", query = "SELECT u FROM Users u WHERE u.name = :name")
-    , @NamedQuery(name = "Users.findByTelephone", query = "SELECT u FROM Users u WHERE u.telephone = :telephone")
-    , @NamedQuery(name = "Users.findByAddress", query = "SELECT u FROM Users u WHERE u.address = :address")
-    , @NamedQuery(name = "Users.findByOccupation", query = "SELECT u FROM Users u WHERE u.occupation = :occupation")
-    , @NamedQuery(name = "Users.findBySex", query = "SELECT u FROM Users u WHERE u.sex = :sex")
-    , @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email")
-    , @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password")
-    , @NamedQuery(name = "Users.findByNumDocument", query = "SELECT u FROM Users u WHERE u.numDocument = :numDocument")
-    , @NamedQuery(name = "Users.findByActive", query = "SELECT u FROM Users u WHERE u.active = :active")
-    , @NamedQuery(name = "Users.findByUlrImg", query = "SELECT u FROM Users u WHERE u.ulrImg = :ulrImg")})
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -104,23 +88,20 @@ public class Users implements Serializable {
     @Size(max = 150)
     @Column(name = "ulr_img")
     private String ulrImg;
-    
-    @JoinTable(name = "users_has_rol", joinColumns = {
-        @JoinColumn(name = "id_users", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "id_rol", referencedColumnName = "id")})
-    @ManyToMany
+    @ManyToMany(mappedBy = "usersList")
     private List<Rol> rolList;
-   
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsers")
     private List<Documents> documentsList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsers")
     private List<Formalities> formalitiesList;
     @JoinColumn(name = "id_cities", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Cities Cities;
+    private Cities idCities;
     @JoinColumn(name = "id_documents_type", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private DocumentsType DocumentsType;
+    private DocumentsType idDocumentsType;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    private List<UsersHasDocuments> usersHasDocumentsList;
 
     public Users() {
     }
@@ -221,7 +202,7 @@ public class Users implements Serializable {
         this.numDocument = numDocument;
     }
 
-    public boolean isActive() {
+    public boolean getActive() {
         return active;
     }
 
@@ -236,7 +217,7 @@ public class Users implements Serializable {
     public void setUlrImg(String ulrImg) {
         this.ulrImg = ulrImg;
     }
-    
+
     @XmlTransient
     public List<Rol> getRolList() {
         return rolList;
@@ -245,7 +226,7 @@ public class Users implements Serializable {
     public void setRolList(List<Rol> rolList) {
         this.rolList = rolList;
     }
-    
+
     @XmlTransient
     public List<Documents> getDocumentsList() {
         return documentsList;
@@ -254,33 +235,41 @@ public class Users implements Serializable {
     public void setDocumentsList(List<Documents> documentsList) {
         this.documentsList = documentsList;
     }
-    
+
     @XmlTransient
     public List<Formalities> getFormalitiesList() {
-        return formalitiesList;
+        return formalitiesList; 
     }
 
     public void setFormalitiesList(List<Formalities> formalitiesList) {
         this.formalitiesList = formalitiesList;
     }
 
-    public Cities getCities() {
-        return Cities;
+    public Cities getIdCities() {
+        return idCities;
     }
 
-    public void setCities(Cities Cities) {
-        this.Cities = Cities;
+    public void setIdCities(Cities idCities) {
+        this.idCities = idCities;
     }
 
-    public DocumentsType getDocumentsType() {
-        return DocumentsType;
+    public DocumentsType getIdDocumentsType() {
+        return idDocumentsType;
     }
 
-    public void setDocumentsType(DocumentsType DocumentsType) {
-        this.DocumentsType = DocumentsType;
+    public void setIdDocumentsType(DocumentsType idDocumentsType) {
+        this.idDocumentsType = idDocumentsType;
     }
 
-    
+    @XmlTransient
+    public List<UsersHasDocuments> getUsersHasDocumentsList() {
+        return usersHasDocumentsList;
+    }
+
+    public void setUsersHasDocumentsList(List<UsersHasDocuments> usersHasDocumentsList) {
+        this.usersHasDocumentsList = usersHasDocumentsList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

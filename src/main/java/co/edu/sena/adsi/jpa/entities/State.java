@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package co.edu.sena.adsi.jpa.entities;
 
 import java.io.Serializable;
@@ -25,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author adsi1261718
+ * @author Johan
  */
 @Entity
 @Table(name = "state")
@@ -111,5 +112,5 @@ public class State implements Serializable {
     public String toString() {
         return "co.edu.sena.adsi.jpa.entities.State[ id=" + id + " ]";
     }
-    
+
 }

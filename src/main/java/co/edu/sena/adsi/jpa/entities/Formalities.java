@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author adsi1261718
+ * @author Johan
  */
 @Entity
 @Table(name = "formalities")

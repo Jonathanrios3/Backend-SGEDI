@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author adsi1261718
+ * @author Johan
  */
 @Entity
 @Table(name = "documents_has_state")
@@ -48,12 +48,12 @@ public class DocumentsHasState implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "date_start")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date dateStart;
     @Basic(optional = false)
     @NotNull
     @Column(name = "date_end")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date dateEnd;
     @Basic(optional = false)
     @NotNull

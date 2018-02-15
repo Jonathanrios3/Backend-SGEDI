@@ -53,7 +53,7 @@ public class AuthREST {
         if (foundUser == null) {
             return Response.status(Status.UNAUTHORIZED).entity(gson.toJson(NOT_FOUND_MSG)).build();
         } else if (user.getPassword().equals(foundUser.getPassword())) {
-            if (foundUser.isActive()) {
+            if (foundUser.getActive()) {
                 System.out.println("ok");
                 final Token token = AuthUtils.createToken(request.getRemoteHost(), foundUser);
                 System.out.println(gson.toJson(token));

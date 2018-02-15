@@ -43,6 +43,7 @@ public class UsersFacade extends AbstractFacade<Users> {
     public UsersFacade() {
         super(Users.class);
     }
+
     public Users findUsersByEmail(String email) {
 
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -64,7 +65,7 @@ public class UsersFacade extends AbstractFacade<Users> {
      *
      * @param numDocument
      * @return Usuario
-      */
+     */
     public Users findUsersByNumDocument(String numDocument) {
 
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -93,7 +94,7 @@ public class UsersFacade extends AbstractFacade<Users> {
      * @param idDepartamento
      * @param idTipoDocumento
      * @return
-      */
+     */
     public List<Users> findUsers(Integer idUsuario, String sexo, Boolean activo,
             String numDocumento, String email, String cities, Integer idDepartamento,
             Integer idTipoDocumento) {
@@ -123,8 +124,8 @@ public class UsersFacade extends AbstractFacade<Users> {
         if (email != null) {
             data = cb.and(data, cb.equal(users.get(Users_.email), email));
         }
-          if (cities != null) {
-            data = cb.and(data, cb.equal(users.get(Users_.Cities), cities));
+        if (cities != null) {
+            data = cb.and(data, cb.equal(users.get(Users_.idCities), cities));
         }
 
         cq.where(data);
@@ -143,7 +144,7 @@ public class UsersFacade extends AbstractFacade<Users> {
      *
      * @param rol
      * @return Usuarios
-      */
+     */
     public List<Users> findAllUsersByRol(String rol) {
 
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -170,7 +171,7 @@ public class UsersFacade extends AbstractFacade<Users> {
      * @param active
      * @param documentsType
      * @return
-     */ 
+     */
     public List<Users> findUsersFiltro(int[] rango, String sex, Boolean active,
             String documentsType) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -188,7 +189,7 @@ public class UsersFacade extends AbstractFacade<Users> {
         }
 
         if (documentsType != null) {
-            Join<Users, DocumentsType> joinDocumentsType = users.join(Users_.DocumentsType);
+            Join<Users, DocumentsType> joinDocumentsType = users.join(Users_.idDocumentsType);
             filtro = cb.and(filtro, cb.equal(joinDocumentsType.get(DocumentsType_.id), documentsType));
         }
 
@@ -224,7 +225,7 @@ public class UsersFacade extends AbstractFacade<Users> {
         }
 
         if (documentsType != null) {
-            Join<Users, DocumentsType> joinDocumentsType = users.join(Users_.DocumentsType);
+            Join<Users, DocumentsType> joinDocumentsType = users.join(Users_.idDocumentsType);
             filtro = cb.and(filtro, cb.equal(joinDocumentsType.get(DocumentsType_.id), documentsType));
         }
 
@@ -233,5 +234,5 @@ public class UsersFacade extends AbstractFacade<Users> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
+
 }
