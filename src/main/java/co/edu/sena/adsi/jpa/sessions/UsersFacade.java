@@ -106,7 +106,7 @@ public class UsersFacade extends AbstractFacade<Users> {
         Predicate data = cb.conjunction();
 
         if (idUsuario != null) {
-            data = cb.and(data, cb.equal(users.get(Users_.id), idUsuario));
+            data = cb.and(data, cb.notEqual(users.get(Users_.id), idUsuario));
         }
 
         if (sexo != null) {
@@ -122,7 +122,8 @@ public class UsersFacade extends AbstractFacade<Users> {
         }
 
         if (email != null) {
-            data = cb.and(data, cb.equal(users.get(Users_.email), email));
+            data = cb.and(data, cb.like(users.get(Users_.email), email + "%"));
+            
         }
         if (cities != null) {
             data = cb.and(data, cb.equal(users.get(Users_.idCities), cities));

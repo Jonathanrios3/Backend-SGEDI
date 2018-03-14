@@ -34,6 +34,17 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "documents")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Documents.findAll", query = "SELECT d FROM Documents d")
+    , @NamedQuery(name = "Documents.findById", query = "SELECT d FROM Documents d WHERE d.id = :id")
+    , @NamedQuery(name = "Documents.findByName", query = "SELECT d FROM Documents d WHERE d.name = :name")
+    , @NamedQuery(name = "Documents.findByDescription", query = "SELECT d FROM Documents d WHERE d.description = :description")
+    , @NamedQuery(name = "Documents.findByDate", query = "SELECT d FROM Documents d WHERE d.date = :date")
+    , @NamedQuery(name = "Documents.findByFormat", query = "SELECT d FROM Documents d WHERE d.format = :format")
+    , @NamedQuery(name = "Documents.findByFolio", query = "SELECT d FROM Documents d WHERE d.folio = :folio")
+    , @NamedQuery(name = "Documents.findByWeight", query = "SELECT d FROM Documents d WHERE d.weight = :weight")
+    , @NamedQuery(name = "Documents.findByFile", query = "SELECT d FROM Documents d WHERE d.file = :file")})
 public class Documents implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,10 +55,10 @@ public class Documents implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
+    @Size(min = 1, max = 200)
     @Column(name = "name")
     private String name;
-    @Size(min = 1, max = 45)
+    @Size(max = 200)
     @Column(name = "description")
     private String description;
     @Basic(optional = false)
@@ -73,6 +84,12 @@ public class Documents implements Serializable {
     @Size(min = 1, max = 200)
     @Column(name = "file")
     private String file;
+    @JoinColumn(name = "id_category", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Category idCategory;
+    @JoinColumn(name = "folders_id", referencedColumnName = "id")
+    @ManyToOne
+    private Folders foldersId;
     @JoinColumn(name = "id_users", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Users idUsers;
@@ -160,6 +177,22 @@ public class Documents implements Serializable {
 
     public void setFile(String file) {
         this.file = file;
+    }
+
+    public Category getIdCategory() {
+        return idCategory;
+    }
+
+    public void setIdCategory(Category idCategory) {
+        this.idCategory = idCategory;
+    }
+
+    public Folders getFoldersId() {
+        return foldersId;
+    }
+
+    public void setFoldersId(Folders foldersId) {
+        this.foldersId = foldersId;
     }
 
     public Users getIdUsers() {

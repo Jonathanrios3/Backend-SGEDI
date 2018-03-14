@@ -9,9 +9,11 @@ import co.edu.sena.adsi.jpa.entities.Documents;
 import co.edu.sena.adsi.jpa.sessions.DocumentsFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.io.File;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -36,11 +38,12 @@ public class DocumentsREST {
     public List<Documents> findAll(){
         return documentsEJB.findAll();
     }
+    
     @GET
     @Path("{id}")
     public Documents findBye(
-    @PathParam("nombre")String nombre){
-        return documentsEJB.find(nombre);
+    @PathParam("id")Integer id){
+        return documentsEJB.find(id);
     }
     @POST
     public void create(Documents documents){
@@ -61,12 +64,12 @@ public class DocumentsREST {
     
     @POST
     @Path("compartirDocumento")
-    public Response compartirDocumento(@QueryParam("propieatario") Integer propieatario,
-                                       @QueryParam("usuario") Integer usuario,
-                                       @QueryParam("documento") Integer documento){
+    public Response compartirDocumento(@QueryParam("idUsuarioPropietario") Integer idUsuarioPropietario,
+                                       @QueryParam("idUsuario") Integer idUsuario,
+                                       @QueryParam("idDocumento") Integer idDocumento){
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
-        try{Boolean status = documentsEJB.compartirDocumento(propieatario, usuario, documento);
+        try{Boolean status = documentsEJB.compartirDocumento(idUsuarioPropietario, idUsuario, idDocumento);
         if(status){
             return Response.status(Response.Status.OK).entity(gson.toJson("El documento se compartio correctamente!")).build();
         }else{
@@ -75,5 +78,20 @@ public class DocumentsREST {
         }catch(Exception e){
             return Response.status(Response.Status.BAD_REQUEST).entity(gson.toJson("Error al compartir el documento!")).build();
         }
+    }
+    
+    @DELETE
+    @Path("{id}")
+    public void delete(@PathParam("id")Integer id){
+        Documents documento = documentsEJB.find(id);
+        File fichero = new File("/home/adsi1261718/Vídeos/NUEVO/z$$$z/FRONTEND SGEDI/client/assets/documentos/"+documento.getFile());
+        fichero.delete();
+        documentsEJB.remove(documento);
+    }
+    
+    @GET
+    @Path("findByFolder")
+    public List<Documents> findByFolder(@QueryParam("folderId") Integer folderId){
+        return documentsEJB.findDocumentsByFolder(folderId);
     }
 }

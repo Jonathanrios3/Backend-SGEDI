@@ -1,16 +1,19 @@
 package co.edu.sena.adsi.jpa.entities;
 
 import co.edu.sena.adsi.jpa.entities.Cities;
+import co.edu.sena.adsi.jpa.entities.Users;
 import javax.annotation.Generated;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-02-15T09:29:33")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-03-14T09:13:47")
 @StaticMetamodel(Company.class)
 public class Company_ { 
 
     public static volatile SingularAttribute<Company, Integer> ext;
     public static volatile SingularAttribute<Company, Integer> contacto;
+    public static volatile ListAttribute<Company, Users> usersList;
     public static volatile SingularAttribute<Company, String> direccion;
     public static volatile SingularAttribute<Company, String> representanteLegal;
     public static volatile SingularAttribute<Company, Boolean> active;

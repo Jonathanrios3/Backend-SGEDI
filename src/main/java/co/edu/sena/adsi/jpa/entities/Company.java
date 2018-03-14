@@ -6,6 +6,7 @@
 package co.edu.sena.adsi.jpa.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,14 +15,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author adsi1261718
+ * @author Johan
  */
 @Entity
 @Table(name = "company")
@@ -94,6 +97,8 @@ public class Company implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "password")
     private String password;
+    @OneToMany(mappedBy = "idCompany")
+    private List<Users> usersList;
     @JoinColumn(name = "id_cities", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Cities idCities;
@@ -211,6 +216,15 @@ public class Company implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @XmlTransient
+    public List<Users> getUsersList() {
+        return usersList;
+    }
+
+    public void setUsersList(List<Users> usersList) {
+        this.usersList = usersList;
     }
 
     public Cities getIdCities() {

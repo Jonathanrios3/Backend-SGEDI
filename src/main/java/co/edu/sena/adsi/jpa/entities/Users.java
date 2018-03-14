@@ -32,6 +32,21 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "users")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u")
+    , @NamedQuery(name = "Users.findById", query = "SELECT u FROM Users u WHERE u.id = :id")
+    , @NamedQuery(name = "Users.findByLastName", query = "SELECT u FROM Users u WHERE u.lastName = :lastName")
+    , @NamedQuery(name = "Users.findByName", query = "SELECT u FROM Users u WHERE u.name = :name")
+    , @NamedQuery(name = "Users.findByTelephone", query = "SELECT u FROM Users u WHERE u.telephone = :telephone")
+    , @NamedQuery(name = "Users.findByAddress", query = "SELECT u FROM Users u WHERE u.address = :address")
+    , @NamedQuery(name = "Users.findByOccupation", query = "SELECT u FROM Users u WHERE u.occupation = :occupation")
+    , @NamedQuery(name = "Users.findBySex", query = "SELECT u FROM Users u WHERE u.sex = :sex")
+    , @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email")
+    , @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password")
+    , @NamedQuery(name = "Users.findByNumDocument", query = "SELECT u FROM Users u WHERE u.numDocument = :numDocument")
+    , @NamedQuery(name = "Users.findByActive", query = "SELECT u FROM Users u WHERE u.active = :active")
+    , @NamedQuery(name = "Users.findByUlrImg", query = "SELECT u FROM Users u WHERE u.ulrImg = :ulrImg")})
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -90,6 +105,8 @@ public class Users implements Serializable {
     private String ulrImg;
     @ManyToMany(mappedBy = "usersList")
     private List<Rol> rolList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usersId")
+    private List<Folders> foldersList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsers")
     private List<Documents> documentsList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsers")
@@ -97,11 +114,16 @@ public class Users implements Serializable {
     @JoinColumn(name = "id_cities", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Cities idCities;
+    @JoinColumn(name = "id_company", referencedColumnName = "id")
+    @ManyToOne
+    private Company idCompany;
     @JoinColumn(name = "id_documents_type", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private DocumentsType idDocumentsType;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private List<UsersHasDocuments> usersHasDocumentsList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    private List<UsersHasFolders> usersHasFoldersList;
 
     public Users() {
     }
@@ -228,6 +250,15 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
+    public List<Folders> getFoldersList() {
+        return foldersList;
+    }
+
+    public void setFoldersList(List<Folders> foldersList) {
+        this.foldersList = foldersList;
+    }
+
+    @XmlTransient
     public List<Documents> getDocumentsList() {
         return documentsList;
     }
@@ -238,7 +269,7 @@ public class Users implements Serializable {
 
     @XmlTransient
     public List<Formalities> getFormalitiesList() {
-        return formalitiesList; 
+        return formalitiesList;
     }
 
     public void setFormalitiesList(List<Formalities> formalitiesList) {
@@ -251,6 +282,14 @@ public class Users implements Serializable {
 
     public void setIdCities(Cities idCities) {
         this.idCities = idCities;
+    }
+
+    public Company getIdCompany() {
+        return idCompany;
+    }
+
+    public void setIdCompany(Company idCompany) {
+        this.idCompany = idCompany;
     }
 
     public DocumentsType getIdDocumentsType() {
@@ -268,6 +307,15 @@ public class Users implements Serializable {
 
     public void setUsersHasDocumentsList(List<UsersHasDocuments> usersHasDocumentsList) {
         this.usersHasDocumentsList = usersHasDocumentsList;
+    }
+
+    @XmlTransient
+    public List<UsersHasFolders> getUsersHasFoldersList() {
+        return usersHasFoldersList;
+    }
+
+    public void setUsersHasFoldersList(List<UsersHasFolders> usersHasFoldersList) {
+        this.usersHasFoldersList = usersHasFoldersList;
     }
 
     @Override

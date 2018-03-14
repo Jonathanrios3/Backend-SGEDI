@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package co.edu.sena.adsi.jpa.entities;
 
 import java.io.Serializable;
@@ -112,5 +111,5 @@ public class State implements Serializable {
     public String toString() {
         return "co.edu.sena.adsi.jpa.entities.State[ id=" + id + " ]";
     }
-
+    
 }

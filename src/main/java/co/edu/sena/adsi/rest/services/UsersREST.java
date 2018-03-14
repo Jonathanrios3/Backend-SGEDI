@@ -120,6 +120,10 @@ public class UsersREST {
 
                     users.setPassword(DigestUtil.cifrarPassword(users.getPassword()));
                     System.out.println("CIUDAD"+ users.getIdCities());
+                    if(users.getSex().equals("M"))
+                        users.setUlrImg("male-default.jpg");
+                    else
+                        users.setUlrImg("female-default.jpg");
                     usersEJB.create(users);
                     try {
 
