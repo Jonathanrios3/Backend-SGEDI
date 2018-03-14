@@ -14,6 +14,8 @@ import co.edu.sena.adsi.rest.auth.DigestUtil;
 import co.edu.sena.adsi.rest.utils.SendEmail;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -234,5 +236,51 @@ public class UsersREST {
                     .entity(gson.toJson("Error al Actualizar el usuario"))
                     .build();
         }
+        
     }
+    
+    @PUT
+    @Path("changePassword")
+    public Response changePassword(@QueryParam("old") String old,
+                                   @QueryParam("new") String newPass,
+                                   @QueryParam("id") Integer id){
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        Users users = usersEJB.find(id);
+        try{
+            if(users.getPassword().equals(DigestUtil.cifrarPassword(old))){
+                users.setPassword(DigestUtil.cifrarPassword(newPass));
+                usersEJB.edit(users);
+                return Response.status(Response.Status.OK).entity(gson.toJson("La contraseña fue cambiada correctamente!")).build();
+            }else{
+                return Response.status(Response.Status.BAD_REQUEST).entity(gson.toJson("La password no es correcta!")).build();
+            }
+        }catch(Exception e){
+            return Response.status(Response.Status.BAD_REQUEST).entity(gson.toJson("Error al intentar cambiar la contraseña!")).build();
+        }
+    }
+    @POST
+    @Path("recuperarContrasena")
+    public Response recuperarContrasena(@QueryParam("email") String email){
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        Users usuario = usersEJB.findUsersByEmail(email);
+        if(usuario == null){
+            return Response.status(Response.Status.BAD_REQUEST).entity(gson.toJson("El usuario no esta registrado")).build();
+        }else{
+            int randUno = (int) (Math.random() * 1000000);
+            int randDos = (int) (Math.random() * 1000000);
+            usuario.setPassword(DigestUtil.cifrarPassword(String.valueOf(randUno) + String.valueOf(randDos)));
+            usersEJB.edit(usuario);
+            
+               EmailApp emailApp = emailEJB.findConfigEmail("REGISTRO");
+                        if (emailApp == null) {
+                            emailApp = emailEJB.findConfigEmail("GENERAL");
+                        }
+            SendEmail enviarEmail = new SendEmail();   
+            enviarEmail.sendRecoverPassword(usuario, String.valueOf(randUno) + String.valueOf(randDos),emailApp);
+            return Response.status(Response.Status.OK).entity(gson.toJson("La nueva contraseña ha sido enviada al correo!")).build();
+        }
+    }
+
 }
