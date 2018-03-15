@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -103,7 +104,10 @@ public class Users implements Serializable {
     @Size(max = 150)
     @Column(name = "ulr_img")
     private String ulrImg;
-    @ManyToMany(mappedBy = "usersList")
+   @JoinTable(name = "users_has_rol", joinColumns = {
+        @JoinColumn(name = "id_users", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_rol", referencedColumnName = "id")})
+    @ManyToMany
     private List<Rol> rolList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usersId")
     private List<Folders> foldersList;
